@@ -1,0 +1,43 @@
+# ⛔ HỘI THOẠI INBOX CHỨA TÊN, SĐT, ẢNH VÀ TÌNH TRẠNG SỨC KHOẺ CỦA KHÁCH.
+# Không commit file hội thoại gốc, file đã bóc, hay bất cứ thứ gì còn nhận dạng được người.
+out/*
+!out/.gitkeep
+hoi-thoai-*.csv
+hoi-thoai-*.xlsx
+inbox-*.csv
+inbox-*.xlsx
+
+# ⛔ HỒ SƠ BÁC SĨ CHỨA EMAIL VÀ MẬT KHẨU ĐĂNG NHẬP — KHÔNG BAO GIỜ commit bản gốc.
+ho-so-bac-si*.csv
+ho-so-bac-si*.xlsx
+bac-si-*.csv
+bac-si-*.xlsx
+
+# ⛔ Ảnh, CT, hồ sơ, footage khách hàng
+anh-khach/
+case/
+footage/
+*.mp4
+*.mov
+*.jpg
+*.jpeg
+*.png
+*.heic
+
+# File số liệu ads tải về để xử lý
+ads-*.csv
+ads-*.xlsx
+so-lieu-*.csv
+so-lieu-*.xlsx
+*.local.csv
+*.local.xlsx
+
+# trang hướng dẫn sinh ra từ tools/ — artifact, không phải nguồn
+tools/huong-dan.html
+
+__pycache__/
+*.pyc
+*.local.json
+~$*
+.DS_Store
+Thumbs.db

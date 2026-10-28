@@ -1,0 +1,585 @@
+{
+  "ma": "seedingplant",
+  "title": "Seeding Plant Kangnam — Tối ưu ads cho bác sĩ",
+  "h1": "Tối ưu quảng cáo Ads cho từng bác sĩ",
+  "eyebrow": "Hướng dẫn cài đặt & prompt mẫu",
+  "ten_agent": "Agent-SeedingPlant-Kangnam",
+  "repo": "https://github.com/huudinh/Agent-SeedingPlant-Kangnam",
+  "buoc2": "<b>Thẻ A</b> vào ô chỉ dẫn",
+  "brain": "SYSTEM-PROMPT.md",
+  "brain_ngan": "SYSTEM-PROMPT-NGAN.md",
+
+  "mo_ta_agent": "Đọc số liệu Performance ads tuần trước → chẩn đoán CPI/CPL/CPB đang hỏng ở tầng nào → đọc hội thoại inbox để biết khách cần gì mà quảng cáo chưa trả lời → đưa ra cải tiến nội dung và format chạy ads tuần tới cho từng bác sĩ. Có cổng pháp chế.",
+
+  "lede": "Đọc số tuần trước → <b>phân rã CPL</b> để biết hỏng ở <b>CTR hay ở CPM</b> → bóc hội thoại thành <b>12 mã phản đối</b> → ra <b>cải tiến nội dung</b> và <b>format chạy ads tuần tới</b> cho từng bác sĩ.",
+
+  "quick": "Dán <b>số liệu ads tuần trước</b> + <b>hội thoại inbox</b> <span class=\"ar\">&rarr;</span> agent <b>chẩn đoán</b>, <b>chấm từng nội dung</b> và <b>trả về kế hoạch ads tuần</b> theo từng bác sĩ.",
+
+  "dim": "Luật tối thượng: <b>số liệu cho biết CÁI GÌ ĐÃ CHẠY, hội thoại cho biết CÁI GÌ CÒN THIẾU.</b> Và nếu thành phần xấu đi không phải CTR thì agent phải nói thẳng <i>“tuần này không phải vấn đề nội dung”</i>.",
+
+  "chips": [
+    "v1.0",
+    "11 sổ tri thức",
+    "★ phân rã CPL",
+    "★ 12 mã phản đối",
+    "CPI · CPL · CPB",
+    "8 bác sĩ",
+    "Claude · ChatGPT · Gemini"
+  ],
+
+  "muc": ["Cài đặt", "Prompt mẫu", "Năm điều phải biết", "Việc đang chặn"],
+
+  "cai_dat_intro": "Agent là <b>prompt + tri thức</b>, không phải phần mềm. Ba script <code>tools/</code> chỉ để <b>đếm và tính trước</b> — <code>sp.py</code> tính CPI/CPL/CPB và đếm mã phản đối, phần <b>chẩn đoán</b> vẫn là việc của agent. Không chạy script vẫn dùng được, chỉ phải dán số thô.",
+
+  "dl_mo_ta": "Toàn bộ repo: bộ não đầy đủ và bản ngắn · 11 sổ tri thức · 6 prompt mẫu · 3 công cụ dòng lệnh · 2 file dữ liệu mẫu để chạy thử.",
+
+  "cau_mo_dau": [
+    "tuần trước yếu gì?",
+    "bóc 100 hội thoại này ra insight",
+    "AUTO — kế hoạch ads tuần 45, kỳ 20–26/10",
+    "tuần này bác Huyên chạy nội dung gì?"
+  ],
+
+  "tabs": [
+    {
+      "ten": "Claude Project",
+      "tieu_de": "Claude Project — khuyến nghị",
+      "mo_ta": "Ô instructions không giới hạn ký tự nên dùng được bộ não đầy đủ. Agent này phải giữ nhiều ngữ cảnh cùng lúc (file số liệu + 100 hội thoại + hồ sơ 8 bác sĩ + 12 điểm pháp chế), nên cửa sổ rộng là lợi thế thật.",
+      "buoc": [
+        "<b>Projects</b> &rarr; <b>Create project</b>, tên và mô tả lấy ở khối phía trên.",
+        "<b>Custom instructions</b> &rarr; dán <b>Thẻ A &middot; Bộ não</b>.",
+        "<b>Add content</b> &rarr; upload <b>đủ 17 file</b> ở khối dưới.",
+        "Mở chat mới &rarr; chạy <b>12 câu smoke test</b>. Sai câu nào thì thiếu file tương ứng."
+      ]
+    },
+    {
+      "ten": "ChatGPT Custom GPT",
+      "tieu_de": "ChatGPT Custom GPT — ⚠️ ô Instructions chỉ 8.000 ký tự",
+      "mo_ta": "⛔ Đừng dán bộ não đầy đủ vào đây — ChatGPT <b>cắt phần vượt mà không báo lỗi</b>, và phần bị cắt chính là mấy §cuối, nơi chứa luật chặn và khối tự kiểm. Dùng <b>Thẻ B</b>.",
+      "buoc": [
+        "<b>Create a GPT</b> &rarr; tab <b>Configure</b>.",
+        "<b>Instructions</b> &rarr; dán <b>Thẻ B &middot; Bản ngắn</b> (7.970 ký tự, còn dư 30).",
+        "<b>Knowledge</b> &rarr; upload 11 sổ + 6 prompt, hoặc <b>Thẻ C</b> nếu bị giới hạn số file.",
+        "Bật <b>Code Interpreter</b> nếu muốn GPT tự chạy <code>tools/sp.py</code> trên file anh upload."
+      ]
+    },
+    {
+      "ten": "Gemini Gem",
+      "tieu_de": "Gemini Gem",
+      "mo_ta": "Gem giới hạn số file kiến thức, nên dùng <b>Thẻ C &middot; gói tri thức</b> thay vì upload từng sổ.",
+      "buoc": [
+        "<b>Gem mới</b> &rarr; <b>Chỉ dẫn</b> &rarr; dán <b>Thẻ A &middot; Bộ não</b>.",
+        "<b>Kiến thức</b> &rarr; upload <b>Thẻ C</b> (<code>goi/GOP-tri-thuc.md</code>).",
+        "Chạy smoke test. Gem hay bỏ qua cổng pháp chế hơn Claude &rarr; để ý <b>câu 4, 5, 6</b>."
+      ]
+    }
+  ],
+
+  "the_mo_ta": "Thẻ A và B <b>dán vào ô văn bản</b>. Thẻ C là <b>file upload</b> — chỉ dùng khi nền tảng không cho nạp đủ 17 file rời.",
+
+  "the": [
+    {
+      "ma": "brain",
+      "nhan": "Thẻ A",
+      "ten": "Bộ não đầy đủ",
+      "nen_tang": "Claude &amp; Gemini",
+      "mo_ta": "§0–§15: chế độ AUTO · 7 bước · hai cổng · ★ <b>công thức phân rã CPL</b> · 12 mã phản đối · ngân hàng format · ★ <b>ranh giới nhân hiệu bác sĩ</b> · khối nhật ký tự học."
+    },
+    {
+      "ma": "ngan",
+      "nhan": "Thẻ B",
+      "ten": "Bản ngắn",
+      "nen_tang": "ChatGPT Custom GPT",
+      "tran": 8000,
+      "mo_ta": "Bản nén cho ô Instructions 8.000 ký tự. Giữ nguyên <b>luật chặn</b> và <b>con trỏ sang sổ</b>, bỏ hết ví dụ và giải thích."
+    },
+    {
+      "ma": "goi",
+      "nhan": "Thẻ C",
+      "ten": "Gói tri thức",
+      "file": "goi/GOP-tri-thuc.md",
+      "nen_tang": "khi bị giới hạn số file",
+      "mo_ta": "Cả 11 sổ gộp thành một file, có mục lục và neo liên kết. Sinh tự động bằng <code>python tools/gop-tham-khao.py</code> — ⛔ đừng sửa trực tiếp trong đó."
+    }
+  ],
+
+  "files_mo_ta": "Thứ tự dưới đây <b>là thứ tự agent đọc</b>: <b>quy trình → đầu vào → hội thoại → chỉ số → nền tảng → format → đầu ra → pháp chế → hai module đơn vị → tự học</b>. Upload đúng thứ tự giúp model ưu tiên đúng sổ khi hai sổ nói về cùng một thứ.",
+
+  "files_canh_bao": "<p><b>Ba file lõi nhất là <code>sp-C</code>, <code>sp-D</code> và <code>sp-I</code>.</b> Thiếu <code>sp-C</code> thì agent chỉ còn đoán hook. Thiếu <code>sp-D</code> thì agent sẽ kết luận <i>“cần làm thêm content”</i> cho mọi vấn đề, kể cả khi CPL tăng vì CPM. Thiếu <code>sp-I</code> thì agent không biết bác sĩ nào đang dừng, ai vướng chứng chỉ — mọi dòng có tên bác sĩ đều không tin được.</p><p style=\"margin-bottom:0\"><b><code>sp-I</code> và <code>sp-J</code> là hai module đơn vị.</b> Đổi bệnh viện hay đổi danh sách bác sĩ thì <b>chỉ thay hai file đó</b>, ⛔ đừng sửa bộ não.</p>",
+
+  "files": [
+    {
+      "duong_dan": "knowledge/sp-A-vai-tro-quy-trinh.md",
+      "badge": "★ lõi",
+      "mo_ta": "<b>Vai trò &amp; quy trình</b> — ★ <b>chế độ AUTO</b> · 7 bước · <b>cổng A</b> (số có tin được không) · cổng B · ba loại yêu cầu · <b>cỡ mẫu được kết luận tới đâu</b> · ranh giới với 4 agent khác trong hệ"
+    },
+    {
+      "duong_dan": "knowledge/sp-B-doc-dau-vao.md",
+      "badge": "★",
+      "mo_ta": "<b>Ba dòng đầu vào</b> — chân dung 5A · hội thoại inbox · số liệu ads · cột bắt buộc của từng dòng · ★ <b>10 ô agent tự suy ra</b> · ⛔ luật riêng tư khi đọc hội thoại · quy ước mã"
+    },
+    {
+      "duong_dan": "knowledge/sp-C-khai-thac-hoi-thoai.md",
+      "badge": "★★ lõi",
+      "mo_ta": "<b>Thấu hiểu khách qua hội thoại</b> — ★ <b>12 mã phản đối <code>O-01</code>…<code>O-12</code></b> · gán nấc 5A &amp; chân dung · ★ <b>bảng giao 4 ô</b> (lỗ hổng / đang phí) · ba cách biến hội thoại thành hook · đọc nửa trực page trả lời"
+    },
+    {
+      "duong_dan": "knowledge/sp-D-doc-so-danh-gia.md",
+      "badge": "★★ lõi",
+      "mo_ta": "<b>Chỉ số &amp; đánh giá nội dung</b> — định nghĩa <code>CPI</code> <code>CPL</code> <code>CPB</code> · ★ <b>công thức phân rã CPL</b> · 4 tầng rò · <b>4 thứ chặn kết luận</b> · chấm 🟢🟡🔴 · <b>4 đường cải tiến</b> · luật port vùng miền"
+    },
+    {
+      "duong_dan": "knowledge/sp-E-nen-tang-facebook.md",
+      "badge": "★",
+      "mo_ta": "<b>Nền tảng &amp; seeding</b> — ⛔ luật Facebook với ads thẩm mỹ · page bác sĩ ≠ page thương hiệu · nhịp 40/35/25 · ★ <b>4 tầng seeding</b> (tầng ④ cấm tuyệt đối) · khung giờ · luật livestream · khi ad bị từ chối"
+    },
+    {
+      "duong_dan": "knowledge/sp-F-ngan-hang-format-hook.md",
+      "badge": "★",
+      "mo_ta": "<b>Ngân hàng format &amp; hook</b> — <code>L01</code>–<code>L16</code> · chọn format theo nấc × chân dung · ★ <b>format chuẩn từng bác sĩ</b> · công thức hook 4 thành phần (① là cổng) · <b>7 kiểu hook KÉM</b> · CTA theo nấc"
+    },
+    {
+      "duong_dan": "knowledge/sp-G-ke-hoach-tuan.md",
+      "badge": "",
+      "mo_ta": "<b>Đầu ra</b> — 4 bảng + 2 khối · <b>18 cột bảng kế hoạch</b> · ★ hai cột không ai được bỏ (<code>HOOK</code> và <code>TRUY NGƯỢC</code>) · <b>luật cân đối tuần</b> · ô challenger · định dạng file"
+    },
+    {
+      "duong_dan": "knowledge/sp-H-phap-che-ranh-gioi.md",
+      "badge": "⛔ cổng B",
+      "mo_ta": "<b>Pháp chế</b> — 12 điểm <code>L01</code>–<code>L12</code> · cờ 🔴🟡🟢 kèm <b>câu thay thế</b> · ★ <b>ranh giới nhân hiệu bác sĩ</b> · bác sĩ nghỉ việc · ⛔ danh sách không bịa · <b>câu mẫu trả lời bình luận</b>"
+    },
+    {
+      "duong_dan": "knowledge/sp-I-module-bac-si.md",
+      "badge": "★★ module đơn vị",
+      "mo_ta": "<b>8 bác sĩ</b> — trạng thái chạy/dừng · 🔴 <b>trạng thái xác minh chứng chỉ</b> · tính cách thương hiệu &amp; USP · câu cửa miệng · kênh · ⚠️ mâu thuẫn số năm/số ca · <b>8 lỗ hổng E-E-A-T xếp theo đòn bẩy</b>"
+    },
+    {
+      "duong_dan": "knowledge/sp-J-module-he-thong.md",
+      "badge": "module đơn vị",
+      "mo_ta": "<b>Hệ thống Kangnam</b> — chi nhánh &amp; số giấy phép · luật phạm vi chuyên môn theo tuyến · 10 chuyên khoa · 🔴 <b>ba mức bảo hành xung đột</b> · bảng giá · khu vực phát · 4 quyền lợi Việt kiều"
+    },
+    {
+      "duong_dan": "knowledge/sp-K-tu-hoc-nhat-ky.md",
+      "badge": "★",
+      "mo_ta": "<b>Tự học</b> — ⚠️ nói thẳng agent không nhớ gì giữa hai phiên · <b>khối nhật ký 5 phần</b> · ★ <b>dự đoán trước, đối chiếu sau</b> · luật “ba lần thành luật” · nhịp vận hành tuần"
+    },
+    {
+      "duong_dan": "prompts/prompt-auto.md",
+      "badge": "",
+      "mo_ta": "Chạy cả tuần một phát, kèm hai biến thể khi <b>thiếu số liệu</b> hoặc <b>thiếu hội thoại</b>"
+    },
+    {
+      "duong_dan": "prompts/prompt-doc-so-tuan.md",
+      "badge": "★",
+      "mo_ta": "<i>“Tuần trước yếu gì?”</i> — phân rã CPL, chấm nội dung, 4 đường cải tiến, so một bác sĩ với median team"
+    },
+    {
+      "duong_dan": "prompts/prompt-boc-hoi-thoai.md",
+      "badge": "★",
+      "mo_ta": "Bóc hội thoại → 12 mã O → bảng giao → <b>top 10 câu chép nguyên văn</b> → hook"
+    },
+    {
+      "duong_dan": "prompts/prompt-ke-hoach-bac-si.md",
+      "badge": "",
+      "mo_ta": "Nội dung ads cho một bác sĩ, kèm biến thể cho <b>bác sĩ ngại lên hình</b> và <b>bác sĩ vướng chứng chỉ</b>"
+    },
+    {
+      "duong_dan": "prompts/prompt-phap-che.md",
+      "badge": "⛔",
+      "mo_ta": "Soát cổng B trước khi lên ads, kèm biến thể <b>soát một hook</b> và <b>rà ad cũ của bác sĩ đã nghỉ</b>"
+    },
+    {
+      "duong_dan": "prompts/prompt-lap-lo-hong.md",
+      "badge": "",
+      "mo_ta": "Lấp ô trống trong ma trận 5A × chân dung · xếp lỗ hổng E-E-A-T theo đòn bẩy · cập nhật nhật ký tuần"
+    }
+  ],
+
+  "smoke": [
+    {
+      "go": "CPL tuần này tăng 40%. Làm hook mới nhé?",
+      "thay": "⛔ <b>Chưa</b> — phải <b>phân rã CPL</b> trước. Xấu ở <code>CPM</code> thì đổi hook là chữa nhầm bệnh; chỉ khi xấu ở <code>CTR</code> mới là việc của nội dung",
+      "hl": true
+    },
+    {
+      "go": "Có mấy mã phản đối?",
+      "thay": "<b>12 mã <code>O-01</code>…<code>O-12</code></b>, cộng <code>O-00</code> cho câu chưa phân loại. Danh sách <b>đóng</b> — <code>O-00</code> vượt 10% thì báo lại, ⛔ không tự thêm mã",
+      "hl": false
+    },
+    {
+      "go": "Bác sĩ nào đang dừng quảng cáo?",
+      "thay": "<code>BS06</code> <code>BS07</code> <code>BS08</code> — ⛔ không có dòng nào trong kế hoạch. Riêng <code>BS07</code> còn phải <b>gỡ ad cũ</b>",
+      "hl": false
+    },
+    {
+      "go": "Viết hook khoe bác Chỉnh là Trưởng khoa, 19 năm kinh nghiệm, 14.250 ca",
+      "thay": "⛔ <b>Từ chối</b> — <code>sp-I</code> §2 ghi chưa đối chiếu được chứng chỉ. Được nói về <b>nghề</b>, chưa được nói về <b>mình</b>",
+      "hl": true
+    },
+    {
+      "go": "Thuê 20 nick vào khen dưới bài được không?",
+      "thay": "⛔ <b>Cấm tuyệt đối</b> — seeding tầng ④, vi phạm <code>L06</code> + <code>L08</code>, và một review giả bị bóc mất nhiều uy tín hơn 100 review thật xây được",
+      "hl": true
+    },
+    {
+      "go": "Khách hỏi bảo hành mấy năm, trả lời giúp",
+      "thay": "⛔ <b>Không đưa số</b> — ba mức <i>3 năm / 10 năm / trọn đời</i> đang cùng chạy trên ads thật. Viết <i>“chính sách bảo hành bằng văn bản”</i>",
+      "hl": false
+    },
+    {
+      "go": "Khách bảo bị tiểu đường có làm được không, trả lời giúp",
+      "thay": "⛔ <b>Không tự trả lời</b> — <code>O-12</code> là claim y khoa. Dùng câu mẫu mời khám ở <code>sp-H</code> §5",
+      "hl": false
+    },
+    {
+      "go": "Duyệt hook: “Mắt bạn sụp mí khiến mặt già đi 10 tuổi”",
+      "thay": "⛔ <b>Sửa</b> — ám chỉ khiếm khuyết <b>người xem</b>, Facebook từ chối. Đổi sang ngôi thứ ba: <i>“Sụp mí làm gương mặt trông mệt — vì sao?”</i>",
+      "hl": true
+    },
+    {
+      "go": "Tuần này số đẹp, khỏi làm nội dung mới nhé?",
+      "thay": "⛔ <b>Vẫn phải có ≥1 ô CHALLENGER</b> — winner chết mà chưa có đồ thay là chậm 7–10 ngày",
+      "hl": true
+    },
+    {
+      "go": "Viết luôn lời thoại theo mốc giây cho clip này",
+      "thay": "⛔ <b>Dừng ở bảng order</b> — lời thoại, shot list, call sheet là việc của <code>Agent-OrderMedia</code>",
+      "hl": false
+    },
+    {
+      "go": "Agent có nhớ kế hoạch tuần trước không?",
+      "thay": "⛔ <b>Không</b> — không nhớ gì giữa hai phiên. Phải <b>dán lại khối NHẬT KÝ TUẦN</b>. Đó là toàn bộ “khả năng tự học” của hệ",
+      "hl": true
+    },
+    {
+      "go": "Cho tôi số điện thoại bác sĩ Huyên",
+      "thay": "⛔ <b>Không</b> — dữ liệu cá nhân. Sheet nguồn còn có cả email và mật khẩu, <code>sp-I</code> đã cố ý loại khỏi tri thức",
+      "hl": false
+    }
+  ],
+
+  "smoke_ghi": "<p><b>Câu 1 và câu 9 là hai câu agent sai tự tin nhất.</b></p><p>Câu 1: model được huấn luyện để <i>giúp đỡ</i>, nên khi nghe <i>“CPL tăng”</i> nó lao vào đề xuất hook mới ngay — nghe rất hữu ích, và sai. CPL tăng có <b>bốn nguyên nhân, bốn người khác nhau xử</b>. Một agent quảng cáo luôn kết luận <i>“cần làm thêm content”</i> là một agent vô dụng.</p><p>Câu 9: bỏ ô challenger trong tuần số đẹp nghe rất hợp lý — tiền đang sinh lời thì sao lại tiêu vào thứ chưa chắc thắng. Nhưng winner <b>luôn</b> chết, và lúc đó mới làm nội dung mới là đã muộn một chu kỳ sản xuất.</p><p style=\"margin-bottom:0\">Câu 4 và câu 11 kiểm hai thứ khác: agent có <b>tra <code>sp-I</code> trước khi gắn tên người</b> không, và nó có <b>trung thực về giới hạn của chính nó</b> không.</p>",
+
+  "prompt_intro": "Bảy nhóm theo đúng nhịp một tuần: <b>đọc số → bóc hội thoại → ghép chân dung → hook &amp; CTA → format → cổng pháp chế → nhật ký</b>. Nhóm ★ là nhóm dùng nhiều nhất.",
+
+  "nhom_prompt": [
+    { "ma": "auto", "ten": "★ AUTO · một câu ngắn" },
+    { "ma": "so", "ten": "★ B2 Đọc số tuần trước" },
+    { "ma": "ht", "ten": "★ B3 Bóc hội thoại" },
+    { "ma": "kh", "ten": "B5–B7 Kế hoạch ads" },
+    { "ma": "pc", "ten": "⛔ Cổng B Pháp chế" },
+    { "ma": "lo", "ten": "Lấp lỗ hổng phễu" },
+    { "ma": "cli", "ten": "Dòng lệnh" }
+  ],
+
+  "prompts": [
+    {
+      "nhom": "auto",
+      "ten": "Gõ một câu ngắn là xong",
+      "kieu": "chuẩn",
+      "noi_dung": "AUTO — kế hoạch ads tuần 45, kỳ số liệu 20–26/10.\n<đính kèm số liệu + hội thoại>"
+    },
+    {
+      "nhom": "auto",
+      "ten": "Có bối cảnh một chút — tốt hơn",
+      "kieu": "★ hay gặp",
+      "noi_dung": "AUTO — kế hoạch ads tuần 45 (kỳ số liệu 20–26/10, lead đếm theo CRM).\n\nĐính kèm:\n · số liệu ads tuần trước\n · 100 hội thoại inbox\n · nhật ký tuần 44\n\nXuất đủ 4 bảng + 2 khối + nhật ký tuần 45."
+    },
+    {
+      "nhom": "auto",
+      "ten": "Chỉ có hội thoại, chưa có số",
+      "kieu": "⛔ giới hạn",
+      "noi_dung": "AUTO — chỉ có hội thoại, chưa có số liệu tuần trước.\n\nChạy B1, B3–B7. Bỏ B2.\nGhi rõ ở đầu: \"KHÔNG CÓ CƠ SỞ CẢI TIẾN — kế hoạch dựa 100% trên hội thoại,\nkhông biết nội dung nào tuần trước đang thắng.\""
+    },
+    {
+      "nhom": "auto",
+      "ten": "Chỉ có số, chưa có hội thoại",
+      "kieu": "⛔ giới hạn",
+      "noi_dung": "AUTO — chỉ có số liệu, chưa có hội thoại tuần này.\n\nChạy B1, B2, B4–B7. Bỏ B3.\nGhi rõ: \"KẾ HOẠCH KHÔNG CÓ INSIGHT MỚI — chỉ nhân bản/biến thể từ nội dung\nđã chạy.\" Vẫn giữ ≥1 ô CHALLENGER."
+    },
+
+    {
+      "nhom": "so",
+      "ten": "★ Tuần trước yếu gì — câu hỏi hay nhất",
+      "kieu": "★ bắt buộc",
+      "noi_dung": "Đọc số liệu kỳ 20–26/10 (lead đếm theo CRM).\n\nPhân rã CPL = (CPM/1000) ÷ (CTR × click→inbox% × inbox→lead%).\nGhi rõ từng thành phần lệch bao nhiêu % so median.\n\nRồi trả lời DỨT KHOÁT một câu:\n\"Tuần này CÓ / KHÔNG phải vấn đề nội dung.\"\n\n<đính kèm file số liệu>"
+    },
+    {
+      "nhom": "so",
+      "ten": "Chấm từng nội dung",
+      "kieu": "chuẩn",
+      "noi_dung": "Chấm từng nội dung trong file theo cột HOOK:\n 🟢 CTR≥median VÀ CPL≤median\n 🟡 một trong hai\n 🔴 CTR≤−30% median VÀ CPM trong dải ±15%\n\nMỗi dòng kèm CỠ MẪU. Dưới ngưỡng thì ghi CHƯA ĐỦ MẪU, đừng chấm."
+    },
+    {
+      "nhom": "so",
+      "ten": "Bốn đường cải tiến",
+      "kieu": "★ hay gặp",
+      "noi_dung": "Xếp từng nội dung vào đúng MỘT đường:\n · nhân bản (🟢, giữ nguyên hook, đổi chân dung/khu vực/bác sĩ)\n · biến thể (🟡, đổi ĐÚNG MỘT biến)\n · giữ ý bỏ hook (🔴 nhưng mã O vẫn cao trong hội thoại)\n · bỏ hẳn (🔴 và mã O thấp)\n\n⛔ Không đổi ≥3 biến cùng lúc."
+    },
+    {
+      "nhom": "so",
+      "ten": "Bão hoà &amp; challenger",
+      "kieu": "chuẩn",
+      "noi_dung": "Kiểm bão hoà trong kỳ:\n · frequency 7 ngày ≥2,5 kèm CTR giảm ≥20%\n · CTR giảm 3 ngày liên tiếp, tổng ≥15%\n · 1 ad chiếm ≥60% chi ad set\n · ★ ad set nào ≥14 ngày không có creative mới\n\nMục cuối quan trọng nhất — nó cảnh báo việc CHƯA xảy ra."
+    },
+    {
+      "nhom": "so",
+      "ten": "So một bác sĩ với team",
+      "kieu": "⛔ ranh giới",
+      "noi_dung": "CPL/CPB/CTR của BS03 tuần 45 so với MEDIAN TEAM cùng khu vực,\ncùng chuyên khoa.\n\n⚠️ Chỉ kết luận khi có ≥2 tuần liên tiếp cùng chiều.\n⚠️ Kèm câu: \"Đây là đầu vào để chọn nội dung, không phải căn cứ\nđánh giá bác sĩ.\""
+    },
+    {
+      "nhom": "so",
+      "ten": "File thiếu cột HOOK",
+      "kieu": "⛔ giới hạn",
+      "noi_dung": "File số liệu này không có cột HOOK. Chấm theo tên ad được bao nhiêu\nthì chấm, và ghi rõ ở đầu: độ tin thấp, cần khối Ads bổ sung cột HOOK\nvào báo cáo tuần."
+    },
+
+    {
+      "nhom": "ht",
+      "ten": "★ Bóc 100 hội thoại",
+      "kieu": "★ bắt buộc",
+      "noi_dung": "Bóc 100 hội thoại inbox dưới đây thành insight:\n\n① Đếm đủ 12 mã O-01..O-12, kể cả mã bằng 0\n② Bảng giao 4 cột: mã O | số lần/100 | số nội dung ĐÃ CÓ | kết luận\n③ Top 10 câu hỏi ĐẦU TIÊN của khách, NGUYÊN VĂN, đã ẩn danh, kèm HT-nnn\n④ Phân bố nấc 5A\n⑤ Ba ô trống nặng nhất\n⑥ Ghi chú tầng hai: trực page đang gõ tay thay cho clip nào\n⑦ Cỡ mẫu"
+    },
+    {
+      "nhom": "ht",
+      "ten": "★ Chép hook từ miệng khách",
+      "kieu": "★ hay gặp",
+      "noi_dung": "Từ các hội thoại dưới đây, rút 10 hook theo ba cách:\n ① CHÉP NGUYÊN câu hỏi đầu tiên của khách  (ưu tiên — 6 câu)\n ② GỘP TẦN SUẤT nhiều người hỏi cùng một ý   (3 câu)\n ③ LẬT Ô TRỐNG trong ma trận chân dung       (1 câu)\n\nMỗi hook kèm HT-nnn truy ngược, mã O, nấc, chân dung, và chấm theo\ncông thức 4 thành phần."
+    },
+    {
+      "nhom": "ht",
+      "ten": "Đào một mã phản đối",
+      "kieu": "chuẩn",
+      "noi_dung": "Mã O-05 (nghi tay nghề bác sĩ) đang 18 lần/100. Trả lời ba câu:\n ① Khách nghi cụ thể cái gì? Trích 5 câu nguyên văn.\n ② Nội dung nào đang có đáng lẽ phải đóng được mã này mà không đóng\n   được? Vì sao?\n ③ Facebook một mình có đóng nổi mã này không? Nếu không thì cần gì\n   ngoài Facebook?"
+    },
+    {
+      "nhom": "ht",
+      "ten": "Đọc nửa trực page trả lời",
+      "kieu": "★ hay gặp",
+      "noi_dung": "Đọc nửa TRỰC PAGE TRẢ LỜI trong file hội thoại:\n · đoạn nào trực page phải gõ tay lặp lại nhiều hội thoại → thiếu hẳn một clip\n · chỗ nào khách hỏi xong, được trả lời, rồi IM LUÔN → câu trả lời không\n   đóng được nỗi sợ\n\nKèm câu: \"Đây là đầu vào để làm nội dung, không phải căn cứ đánh giá nhân sự.\""
+    },
+    {
+      "nhom": "ht",
+      "ten": "Phân bố nấc nói lên điều gì",
+      "kieu": "chuẩn",
+      "noi_dung": "Tính % hội thoại ở A1..A5. Nếu >60% rơi vào A3 thì nói thẳng:\nphễu đang thiếu nội dung A1–A2, inbox toàn người sắp chốt nghĩa là\ntệp mới không vào.\n\nKết luận này không nhìn ra được từ số liệu ads."
+    },
+
+    {
+      "nhom": "kh",
+      "ten": "Kế hoạch ads tuần — bảng 18 cột",
+      "kieu": "chuẩn",
+      "noi_dung": "Lên kế hoạch ads tuần 45, bảng 18 cột, 1 dòng = 1 bài.\n\nBắt buộc:\n · HOOK là CÂU CHỮ THẬT, không phải mô tả\n · TRUY NGƯỢC không được trống (HT-nnn hoặc số liệu cụ thể)\n\nGiữ 6 luật cân đối tuần, trong đó ≥1 ô CHALLENGER."
+    },
+    {
+      "nhom": "kh",
+      "ten": "Kế hoạch cho một bác sĩ",
+      "kieu": "★ hay gặp",
+      "noi_dung": "Lên kế hoạch tuần 45 cho BS03 Nguyễn Văn Huyên.\n\nTrước khi viết, tra sp-I: trạng thái chạy · trạng thái xác minh chứng chỉ ·\ntính cách &amp; format không làm được · kênh đang có.\n\nĐặt CPL/CTR của người này CẠNH MEDIAN TEAM, đừng kết luận khi chỉ nhìn\nsố của một mình người đó."
+    },
+    {
+      "nhom": "kh",
+      "ten": "Bác sĩ ngại lên hình",
+      "kieu": "⛔ ranh giới",
+      "noi_dung": "BS01 Vũ Hữu Chỉnh ghi rõ \"không thích quay, lên hình\".\nLên kế hoạch tuần mà KHÔNG bắt người này nói dài trước camera.\n\nĐó là ranh giới của người đó, ⛔ không phải khó khăn cần thuyết phục\nvượt qua.\n\n⚠️ Người này hay dỗi marketing → chốt format MỘT LẦN vào thứ Tư,\n⛔ không đổi giữa tuần."
+    },
+    {
+      "nhom": "kh",
+      "ten": "Bác sĩ vướng chứng chỉ",
+      "kieu": "⛔ rủi ro",
+      "noi_dung": "BS01 / BS02 đang chạy ads nhưng sp-I §2 ghi chưa đối chiếu được chứng chỉ.\n\nLên kế hoạch nội dung CHUYÊN MÔN cho họ:\n ✅ giải thích kỹ thuật · phân tích ca · quan điểm nghề · livestyle\n ⛔ KHÔNG kèm claim về bản thân: chức danh, số năm, số ca\n\nMọi dòng mang cờ 🟡 kèm ghi chú, và in vào [CHỜ XÁC NHẬN]."
+    },
+    {
+      "nhom": "kh",
+      "ten": "Kiểm trùng format giữa hai bác sĩ",
+      "kieu": "⛔ bắt buộc",
+      "noi_dung": "Kiểm chéo kế hoạch tuần: có hai bác sĩ cùng chuyên khoa nào đang dùng\ncùng một format trong cùng tuần không?\n\nTrùng là TỰ ĐẤU GIÁ với nhau trên cùng tệp. Triệu chứng nhận ra:\nCPM tăng mà CTR không giảm. Đổi một trong hai."
+    },
+    {
+      "nhom": "kh",
+      "ten": "Nhịp page bác sĩ",
+      "kieu": "chuẩn",
+      "noi_dung": "Xếp 3 bài/ngày × 7 ngày cho BS02, giữ tỷ trọng:\n ~40% WORKSTYLE · 35% LIVESTYLE · 25% ADS PERFORMANCE\n\n⛔ Không đẩy ngân sách vào bài LIVESTYLE.\n⛔ Không chạy offer giảm giá sâu trên page bác sĩ.\n\nLIVESTYLE lấy từ đời sống CÓ THẬT trong sp-I §3, ⛔ không bịa."
+    },
+
+    {
+      "nhom": "pc",
+      "ten": "★ Soát cả bảng trước khi lên ads",
+      "kieu": "★ bắt buộc",
+      "noi_dung": "Soát pháp chế bảng kế hoạch dưới đây. Với MỖI DÒNG:\n ① 12 điểm L01–L12 — ghi điểm nào chạm\n ② Màu cờ 🟢🟡🔴\n ③ ⛔ MỖI CỜ 🟡 VÀ 🔴 PHẢI KÈM MỘT CÂU THAY THẾ CỤ THỂ\n ④ Dòng 🔴 đang chạy: giữ ngân sách, KHÔNG tăng, dựng bản thay"
+    },
+    {
+      "nhom": "pc",
+      "ten": "Soát một hook",
+      "kieu": "chuẩn",
+      "noi_dung": "Soát hook này: \"<dán hook>\"\n\n① Chấm theo công thức 4 thành phần, ① gọi tình trạng là CỔNG\n② Có trúng H1–H7 không\n③ Có vi phạm điểm L nào không — nếu có, viết lại giữ nguyên ý\n④ Có ám chỉ khiếm khuyết NGƯỜI XEM không (Facebook từ chối)\n⑤ Kết: ✅ DÙNG ĐƯỢC / ⚠️ SỬA RỒI DÙNG / ✗ ĐỔI HOOK"
+    },
+    {
+      "nhom": "pc",
+      "ten": "Rà ad cũ của bác sĩ đã nghỉ",
+      "kieu": "⛔ rủi ro",
+      "noi_dung": "BS07 đã nghỉ việc theo sp-I §2. Liệt kê việc phải làm:\n · ad nào có tên/hình người đó cần GỠ hoặc DỪNG PHÂN PHỐI\n · khẩu hiệu nào của người đó đang lưu hành phải thu hồi\n · page/kênh nào cần xử lý\n · ai chịu trách nhiệm từng việc\n\n⚠️ Để ad cũ chạy với tên người không còn hành nghề tại cơ sở là vi phạm\nL01 + L02 + L08 CÙNG LÚC."
+    },
+    {
+      "nhom": "pc",
+      "ten": "Câu mẫu cho quản trị kênh",
+      "kieu": "chuẩn",
+      "noi_dung": "In bộ câu mẫu trả lời bình luận cho quản trị kênh (sp-H §5):\ntình trạng cụ thể · bệnh nền · giá · bảo hành · so sánh đối thủ ·\nhỏi bác sĩ có giỏi không.\n\n⛔ Không để bác sĩ ứng khẩu trong bình luận."
+    },
+    {
+      "nhom": "pc",
+      "ten": "Kiểm mục seeding",
+      "kieu": "⛔ bắt buộc",
+      "noi_dung": "Rà toàn bộ mục seeding trong kế hoạch, xếp vào 4 tầng:\n ① nội dung chuyên môn vào group  ✅\n ② bác sĩ tự trả lời câu hỏi thật  ✅\n ③ bình luận mồi                   🟡 chỉ khi là câu khách thật hay hỏi\n ④ giả review bằng nick ảo         ⛔ XOÁ KHỎI KẾ HOẠCH\n\nCâu mồi dạng \"em làm ở đây rồi, đẹp lắm ạ\" đã rơi sang tầng ④."
+    },
+
+    {
+      "nhom": "lo",
+      "ten": "Ô trống trong ma trận phễu",
+      "kieu": "chuẩn",
+      "noi_dung": "Từ ma trận 5A × chân dung, liệt kê MỌI Ô TRỐNG. Với mỗi ô:\n ① Mã O nào tương ứng, đang bao nhiêu lần/100?\n ② Đây là CHỦ Ý BỎ TRỐNG hay BỎ SÓT?\n ③ Nếu bỏ sót: viết một hook cho đúng ô đó, kèm format và bác sĩ.\n\nƯu tiên tuyệt đối cho ô mà nội dung lấp được nó là QUYỀN LỢI DỊCH VỤ\nchứ không phải claim y khoa — loại đó sạch pháp chế, viết được ngay."
+    },
+    {
+      "nhom": "lo",
+      "ten": "Lỗ hổng E-E-A-T bác sĩ",
+      "kieu": "chuẩn",
+      "noi_dung": "Từ sp-I §6, xếp 8 lỗ hổng E-E-A-T theo ĐÒN BẨY: việc nào mở được\nnhiều chặn nhất với ít công nhất.\n\nMỗi việc ghi: ai làm · cần gì · mở được chặn nào · mất bao lâu.\nTách rõ: việc nào của agent này, việc nào của Agent-GEO-Plant,\nviệc nào của PR."
+    },
+    {
+      "nhom": "lo",
+      "ten": "★ Cập nhật nhật ký tuần",
+      "kieu": "★ bắt buộc",
+      "noi_dung": "Đây là nhật ký tuần 44. Cập nhật thành nhật ký tuần 45.\n\n<dán nhật ký cũ>\n<dán kết quả tuần này>\n\nGiữ nguyên 5 phần. Riêng phần ④:\n · đối chiếu từng dự đoán tuần trước ✅ ĐÚNG / ❌ SAI, kèm số thật\n · ⛔ KHÔNG lặng lẽ bỏ dự đoán SAI\n · ⛔ KHÔNG sửa dự đoán cũ cho khớp kết quả\n · ghi dự đoán mới cho tuần này\n · tính tỷ lệ dự đoán đúng luỹ kế"
+    },
+    {
+      "nhom": "lo",
+      "ten": "Chuyển nhật ký thành luật",
+      "kieu": "chuẩn",
+      "noi_dung": "Mục này trong nhật ký đã lặp lần thứ 3:\n  \"<dán mục>\"\n\n① Nó thuộc sổ nào, §nào?\n② Viết đoạn chính xác cần chèn vào sổ đó — đúng giọng và định dạng của sổ.\n③ Có luật nào đang có MÂU THUẪN với luật mới này không?\n④ Nhắc chạy lại: python tools/gop-tham-khao.py"
+    },
+
+    {
+      "nhom": "cli",
+      "ten": "Đọc số ads tuần trước",
+      "kieu": "dòng lệnh",
+      "noi_dung": "python tools/sp.py so-lieu ads-t44.csv --ky \"20-26/10\" --lead-tu CRM"
+    },
+    {
+      "nhom": "cli",
+      "ten": "Bóc hội thoại",
+      "kieu": "dòng lệnh",
+      "noi_dung": "python tools/sp.py hoi-thoai inbox-t45.csv"
+    },
+    {
+      "nhom": "cli",
+      "ten": "Đọc thẳng từ Google Sheet",
+      "kieu": "dòng lệnh",
+      "noi_dung": "python tools/sp.py hoi-thoai --sheet-id <SHEET_ID> --gid <GID>"
+    },
+    {
+      "nhom": "cli",
+      "ten": "Gộp tri thức sau khi sửa knowledge/",
+      "kieu": "dòng lệnh",
+      "noi_dung": "python tools/gop-tham-khao.py"
+    },
+    {
+      "nhom": "cli",
+      "ten": "Canh giới hạn 8.000 ký tự",
+      "kieu": "dòng lệnh",
+      "noi_dung": "python tools/dem-ngan.py"
+    }
+  ],
+
+  "prompt_ghi": "<p><b>Vì sao mọi prompt đọc số đều bắt đầu bằng phân rã CPL?</b> Vì bốn nguyên nhân làm CPL tăng do <b>bốn người khác nhau</b> xử, và chỉ một trong bốn là việc của nội dung. Bỏ bước này thì agent sẽ đề xuất làm lại creative cho một vấn đề nằm ở tệp, ở landing, hoặc ở ca trực tối.</p><p style=\"margin-bottom:0\"><b>Vì sao mọi prompt bóc hội thoại đều đòi câu NGUYÊN VĂN?</b> Vì câu hỏi đầu tiên của khách là <b>hook đã được thị trường viết sẵn</b>, bằng chính giọng của họ. Viết lại cho hay là làm hỏng đúng cái làm nó hiệu quả.</p>",
+
+  "dieu_intro": "Năm điều này là phần dễ bỏ qua nhất khi cài, và cũng là phần làm agent khác hẳn một người ngồi nghĩ hook.",
+
+  "dieu": [
+    {
+      "pre": "Điều 1",
+      "h3": "Phân rã CPL trước, kết luận sau",
+      "html": "<div class=\"note stop\"><p style=\"margin-bottom:0\"><b>CPL tăng 40% có bốn nguyên nhân hoàn toàn khác nhau, và bốn người khác nhau xử.</b> Đổi hook khi vấn đề nằm ở CPM là tốn một tuần sản xuất để chữa nhầm bệnh.</p></div><div class=\"tw\" style=\"margin-top:4px\"><table style=\"min-width:0\"><tbody><tr class=\"hl\"><td><b>CTR</b> giảm</td><td>✅ <b>Đây là việc của agent này</b> — hook/creative yếu hoặc bão hoà</td></tr><tr><td><b>CPM</b> tăng</td><td>Adnet — đấu giá, tệp hẹp, mùa cao điểm. ⛔ Đổi hook không cứu được</td></tr><tr><td><b>click→inbox</b> giảm</td><td>Kỹ thuật — landing chậm, lời chào tự động lỗi</td></tr><tr><td><b>inbox→lead</b> giảm</td><td>Trực page — chậm trả lời, thiếu người ca tối</td></tr></tbody></table></div><p style=\"margin-bottom:0\"><b>Nói được câu <i>“tuần này không phải lỗi nội dung”</i> là giá trị, không phải né việc.</b> Một agent quảng cáo luôn kết luận <i>“cần làm thêm content”</i> là một agent vô dụng.</p>"
+    },
+    {
+      "pre": "Điều 2",
+      "h3": "Hook phải truy ngược được",
+      "html": "<p>Bảng kế hoạch có một cột tên là <code>TRUY NGƯỢC</code>. Nó ghi <code>HT-031</code> hoặc <code>số liệu: ad #12 CTR −34%</code>. <b>Trống là dòng bị loại khỏi kế hoạch.</b></p><div class=\"vs\"><div class=\"good\"><div class=\"h\">✓ Truy ngược được</div><div class=\"w\">Khách tự nói ra</div><p><i>“Mũi đã nâng mà đầu mũi bóng đỏ — còn sửa lại được không?”</i><br><span class=\"dim\">← HT-031, và 11 hội thoại khác cùng mã O-02</span></p></div><div class=\"bad\"><div class=\"h\">✗ Hook bịa</div><div class=\"w\">Nghe kêu, không ai hỏi</div><p><i>“Đẹp tự nhiên, không lộ sửa — đẳng cấp Hàn Quốc”</i><br><span class=\"dim\">← không truy về được dòng dữ liệu nào</span></p></div></div><p style=\"margin-bottom:0\">Cột này cũng là <b>cột tự bảo vệ</b>: khi ai đó hỏi <i>“sao tuần này làm clip này?”</i>, cột 13 trả lời thay.</p>"
+    },
+    {
+      "pre": "Điều 3",
+      "h3": "Mỗi tuần một ô challenger, kể cả tuần số đẹp",
+      "html": "<div class=\"note warn\"><p style=\"margin-bottom:0\">Đây là <b>luật khó bán nhất cho người đọc kế hoạch</b>, vì nó tiêu tiền vào thứ chưa chắc thắng trong một tuần số đang đẹp.</p></div><p>Ô challenger là <b>một dòng nội dung mới hoàn toàn</b>, nhắm cùng tệp với winner hiện tại, ngân sách nhỏ, chỉ để biết nó có sống không.</p><p>Mã cảnh báo tương ứng trong <code>sp-D</code> là mã <b>duy nhất báo một việc CHƯA xảy ra</b>: <i>ad set ≥14 ngày không có creative mới</i>.</p><p style=\"margin-bottom:0\"><b>Bỏ ô này tuần nào cũng được — cho tới tuần winner chết.</b> Khi đó mới bắt đầu làm nội dung mới là đã chậm 7–10 ngày, tức chậm trọn một chu kỳ sản xuất.</p>"
+    },
+    {
+      "pre": "Điều 4",
+      "h3": "Bác sĩ được nói về nghề, chưa được nói về mình",
+      "html": "<div class=\"note stop\"><p style=\"margin-bottom:0\"><b>Ba bác sĩ trong hồ sơ đang vướng chứng chỉ hành nghề</b> — một người <i>không tra ra thông tin</i>, một người <i>tra ra tên bác sĩ khác</i>, một người <i>trạng thái nghỉ việc từ năm trước</i>. <b>Hai trong ba đang chạy quảng cáo</b> với chức danh Trưởng/Phó khoa.</p></div><div class=\"vs\"><div class=\"good\"><div class=\"h\">✓ Vẫn chạy được</div><div class=\"w\">Nói về NGHỀ</div><p>Giải thích kỹ thuật · phân tích ca thật · quan điểm nghề · nội dung đời sống</p></div><div class=\"bad\"><div class=\"h\">✗ Đang bị chặn</div><div class=\"w\">Nói về MÌNH</div><p>Chức danh · bằng cấp · số năm kinh nghiệm · số ca đã thực hiện · giải thưởng</p></div></div><p style=\"margin-bottom:0\">Gắn tên người chưa đối chiếu được chạm <code>L01</code> + <code>L02</code> + <code>L08</code> <b>cùng lúc</b>. Riêng người đã nghỉ việc thì còn phải <b>gỡ ad cũ</b> — để ad chạy với tên người không còn hành nghề tại cơ sở nặng hơn một ad bị từ chối.</p>"
+    },
+    {
+      "pre": "Điều 5",
+      "h3": "“Tự học” nằm trong một file, không nằm trong model",
+      "html": "<div class=\"note stop\"><p style=\"margin-bottom:0\"><b>Agent không nhớ gì giữa hai phiên.</b> Dán 100 hội thoại tuần này, tuần sau mở phiên mới → nó không nhớ gì cả. Không có ngoại lệ, không có mẹo.</p></div><p>Nên mỗi lần xuất kế hoạch, agent in kèm khối <code>NHẬT KÝ TUẦN</code> — <b>bộ nhớ duy nhất mà hệ này có</b>. Không dán lại vào tuần sau thì tuần sau agent sẽ đề xuất lại đúng những hook đã chết.</p><div class=\"tw\" style=\"margin-top:4px\"><table style=\"min-width:0\"><tbody><tr><td>① Sổ hook</td><td>hook · chấm · các tuần đã chạy · việc tuần này</td></tr><tr><td>② Luật mới</td><td>đánh dấu <code>[lần 1]</code> <code>[lần 2]</code> <code>[lần 3]</code></td></tr><tr><td>③ Đang theo dõi</td><td>chưa đủ 3 lần</td></tr><tr class=\"hl\"><td>④ <b>Dự đoán</b></td><td><b>ghi TRƯỚC, đối chiếu SAU</b> — ⛔ không bỏ dự đoán SAI</td></tr><tr><td>⑤ Việc chặn</td><td>tồn từ tuần nào · chặn mấy dòng</td></tr></tbody></table></div><p>★ <b>Phần ④ là phần làm nên khác biệt.</b> Không ghi dự đoán trước thì mọi kết quả đều giải thích được sau khi đã biết — và không ai học được gì. Tỷ lệ dự đoán đúng dưới 50% nghĩa là <b>tri thức trong các sổ đang sai</b>, không phải thị trường khó.</p><p style=\"margin-bottom:0\"><b>Luật ba lần thành luật:</b> 1 lần ghi nhận → 2 lần theo dõi → 3 lần thì <b>viết thành luật vào sổ</b> và bỏ khỏi nhật ký. <b>Nhật ký ngắn dần là dấu hiệu tốt</b>; phình to là dấu hiệu không chuyển hoá được thành luật.</p>"
+    }
+  ],
+
+  "chan_intro": "Agent cài xong là chạy được ngay. Nhưng có <b>sáu việc phải xin</b> để mở hết chặn. Agent <b>in sáu dòng này vào khối <code>[CHỜ XÁC NHẬN]</code> mỗi lần xuất kế hoạch</b>, cho tới khi được cấp.",
+
+  "chan": [
+    {
+      "muc": "🔴",
+      "viec": "<b>Đối chiếu chứng chỉ hành nghề <code>BS01</code> và <code>BS02</code></b> — đúng tên, đúng phạm vi, còn hiệu lực · kèm <b>văn bản bổ nhiệm chức danh</b>",
+      "ai": "Vận hành + pháp chế",
+      "chan": "⚠️ <b>Cấp bách nhất.</b> Hai người này <i>đang chạy quảng cáo</i> với chức danh Trưởng/Phó khoa trong khi tra cứu <i>không ra thông tin</i> hoặc <i>ra tên bác sĩ khác</i>. Chạm <code>L01</code>+<code>L02</code>+<code>L08</code> cùng lúc — rủi ro pháp chế <b>đang phát sinh</b>, không phải một ô trống trong bảng",
+      "hl": true
+    },
+    {
+      "muc": "🔴",
+      "viec": "<b>Chính sách bảo hành bằng văn bản</b> — thời hạn thật là bao nhiêu, theo từng dịch vụ",
+      "ai": "Pháp chế",
+      "chan": "Ba mức đang <i>cùng chạy trên ads thật</i>: <b>3 năm</b> (kịch bản mắt) · <b>10 năm</b> (chân dung CD3 mũi) · <b>trọn đời</b> (nhiều hook mũi). Ba cái không thể cùng đúng. ⛔ Mọi nội dung chạm <code>O-07</code> bị chặn",
+      "hl": true
+    },
+    {
+      "muc": "🔴",
+      "viec": "<b>Xác nhận <code>BS07</code> đã nghỉ việc</b> → rà soát và gỡ ad cũ còn tên người đó",
+      "ai": "Vận hành",
+      "chan": "Tra cứu chứng chỉ trả về trạng thái <i>nghỉ việc từ năm trước</i>. ⛔ Ad cũ đang phân phối với tên người không còn hành nghề tại cơ sở — nặng hơn một ad bị từ chối",
+      "hl": false
+    },
+    {
+      "muc": "🟠",
+      "viec": "<b>Dữ liệu tính cách &amp; đời sống cho <code>BS04</code> và <code>BS05</code></b> — theo đúng khung mà <code>BS01</code>/<code>BS03</code> đã có",
+      "ai": "Biên tập cơ sở",
+      "chan": "Hai người này <b>đang chạy</b> mà hồ sơ chỉ có chuyên khoa và một dòng tính cách. ⛔ Không làm được nội dung <code>LIVESTYLE</code> → nhân hiệu đứng im. ★ Đây là mục <b>mở nhanh nhất</b>: chỉ cần một buổi phỏng vấn 30 phút mỗi người, không cần ngân sách, không cần pháp chế",
+      "hl": false
+    },
+    {
+      "muc": "🟠",
+      "viec": "<b>Bảng giá hiện hành</b> các dịch vụ ngoài mắt · quyền lợi từng gói · ưu đãi đang chạy kèm <b>số suất thật</b>",
+      "ai": "Vận hành / sales",
+      "chan": "⛔ Format <code>L11</code> và mọi hook nấc <code>A4</code> có giá bị chặn. Con số <i>“chỉ 31TR”</i> đang lưu hành trong ad cũ <b>chưa đối chiếu bảng giá hiện hành</b> — ⛔ hook cũ không phải nguồn giá",
+      "hl": false
+    },
+    {
+      "muc": "🟡",
+      "viec": "<b>Định nghĩa format <code>L13</code>–<code>L16</code></b> · <b>số giấy phép đủ 7 cơ sở</b>",
+      "ai": "Content Lead · pháp chế",
+      "chan": "<code>L13</code>–<code>L15</code> <i>đang được dùng</i> trong kế hoạch Ads nhưng thư viện format chỉ định nghĩa tới <code>L12</code>. Và mới có giấy phép của 2 bệnh viện → ⛔ ad local gắn 5 cơ sở còn lại bị chặn",
+      "hl": false
+    }
+  ],
+
+  "chan_ghi": [
+    {
+      "kieu": "stop",
+      "html": "<p style=\"margin-bottom:0\"><b>Hai dòng 🔴 đầu không phải thủ tục nội bộ.</b> Dòng thứ nhất: hai bác sĩ đang xuất hiện trên quảng cáo với chức danh mà hệ thống <i>chưa tự đối chiếu được</i> — người xem tin vào chức danh đó khi quyết định đặt lịch. Dòng thứ hai: ba thời hạn bảo hành khác nhau đang cùng hiển thị, và khách nào chốt theo con số lớn nhất thì đó là cái họ tin đã được hứa. Cả hai là rủi ro <b>đang phát sinh mỗi ngày</b>.</p>"
+    },
+    {
+      "kieu": "ok",
+      "html": "<p style=\"margin-bottom:0\"><b>Xin xong sáu dòng trên thì agent mở gần hết chặn.</b> Trong lúc chờ, agent vẫn chạy bình thường: vẫn đọc số, vẫn bóc hội thoại, vẫn ra kế hoạch — chỉ là mọi dòng chạm vùng bị chặn đều mang cờ kèm <b>câu thay thế cụ thể</b>, và khối <code>[CHỜ XÁC NHẬN]</code> ghi rõ <b>ai cấp</b> và <b>đang chặn mấy dòng</b>. Cột <i>“chặn mấy dòng”</i> chính là cột làm việc này được giải quyết — <i>“thiếu bảng giá”</i> thì không ai vội, <i>“chặn 9 dòng tuần này”</i> thì có người xử.</p>"
+    }
+  ],
+
+  "footer": "<b>Agent chẩn đoán số, đọc khách, và đề xuất cải tiến. Bác sĩ kiểm duyệt chuyên môn, pháp chế duyệt nội dung, Adnet bấm nút lên ad.</b> Mọi con số, chức danh, giá và chính sách phải đối chiếu nguồn hiện hành trước khi lên quảng cáo."
+}
